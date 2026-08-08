@@ -126,6 +126,73 @@ h1 {
 .story-btn.c2 { background: #fff3c4; box-shadow: 0 5px 0 #ffd54f; }
 .story-btn.c3 { background: #d6ecff; box-shadow: 0 5px 0 #90caf9; }
 
+/* ---------- alphabet ---------- */
+
+#abc-btn {
+  width: 100%;
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-family: inherit;
+  padding: 18px 22px;
+  border-radius: 24px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #e1bee7, #b39ddb);
+  box-shadow: 0 5px 0 #9575cd;
+  color: #4a148c;
+  margin-bottom: 22px;
+  text-align: left;
+  transition: transform 0.12s;
+}
+#abc-btn:hover, #abc-btn:active { transform: scale(1.02); }
+#abc-btn .level { display: block; font-size: 0.9rem; font-weight: 600; opacity: 0.75; margin-top: 2px; }
+
+#abc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.abc-tile {
+  font-family: inherit;
+  font-size: 1.6rem;
+  font-weight: 800;
+  padding: 14px 6px;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  background: white;
+  color: #37474f;
+  box-shadow: 0 4px 0 #cfd8dc;
+  transition: transform 0.1s;
+  position: relative;
+}
+.abc-tile:hover { transform: scale(1.06); }
+.abc-tile .tile-emoji { display: block; font-size: 1.9rem; margin-top: 2px; }
+.abc-tile.done { background: #e8f5e9; box-shadow: 0 4px 0 #a5d6a7; }
+.abc-tile.done::after {
+  content: "✓";
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  color: #2e7d32;
+  font-size: 1rem;
+}
+
+#letter-card {
+  background: #fffdf5;
+  border: 4px dashed #b39ddb;
+  border-radius: 30px;
+  padding: 30px 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 6px 18px rgba(149, 117, 205, 0.2);
+}
+
+#letter-big { font-size: 5.5rem; font-weight: 800; color: #4a148c; line-height: 1.1; }
+#letter-emoji { font-size: 6.5rem; line-height: 1.3; }
+#letter-word { font-size: 2.2rem; font-weight: 800; color: #37474f; }
+
 /* ---------- reader ---------- */
 
 #progress-dots { margin-bottom: 14px; font-size: 1.15rem; letter-spacing: 6px; }

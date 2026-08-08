@@ -14,7 +14,40 @@ const state = {
   tries: 0,           // attempts on the current sentence
   listening: false,
   recognition: null,
+  letterIdx: 0,
+  lettersSeen: new Set(JSON.parse(localStorage.getItem("primer_abc") || "[]")),
 };
+
+// ---------- alphabet data ----------
+
+const ALPHABET = [
+  { letter: "A", word: "Apple", emoji: "🍎" },
+  { letter: "B", word: "Ball", emoji: "⚽" },
+  { letter: "C", word: "Cat", emoji: "🐱" },
+  { letter: "D", word: "Dog", emoji: "🐶" },
+  { letter: "E", word: "Elephant", emoji: "🐘" },
+  { letter: "F", word: "Fish", emoji: "🐟" },
+  { letter: "G", word: "Goat", emoji: "🐐" },
+  { letter: "H", word: "Hen", emoji: "🐔" },
+  { letter: "I", word: "Ice cream", emoji: "🍦" },
+  { letter: "J", word: "Juice", emoji: "🧃" },
+  { letter: "K", word: "Kite", emoji: "🪁" },
+  { letter: "L", word: "Lion", emoji: "🦁" },
+  { letter: "M", word: "Mango", emoji: "🥭" },
+  { letter: "N", word: "Nest", emoji: "🪺" },
+  { letter: "O", word: "Orange", emoji: "🍊" },
+  { letter: "P", word: "Parrot", emoji: "🦜" },
+  { letter: "Q", word: "Queen", emoji: "👑" },
+  { letter: "R", word: "Rabbit", emoji: "🐰" },
+  { letter: "S", word: "Sun", emoji: "☀️" },
+  { letter: "T", word: "Tiger", emoji: "🐯" },
+  { letter: "U", word: "Umbrella", emoji: "☂️" },
+  { letter: "V", word: "Van", emoji: "🚐" },
+  { letter: "W", word: "Watch", emoji: "⌚" },
+  { letter: "X", word: "X-ray", emoji: "🩻" },
+  { letter: "Y", word: "Yo-yo", emoji: "🪀" },
+  { letter: "Z", word: "Zebra", emoji: "🦓" },
+];
 
 // ---------- Gaara's voice lines ----------
 
@@ -153,10 +186,67 @@ function init() {
   $("next").onclick = nextSentence;
   $("quit").onclick = showPicker;
   $("again").onclick = showPicker;
+
+  $("abc-btn").onclick = showAbcGrid;
+  $("abc-back").onclick = showPicker;
+  $("letter-grid-btn").onclick = showAbcGrid;
+  $("letter-hear").onclick = () => sayLetter(state.letterIdx);
+  $("letter-prev").onclick = () => openLetter((state.letterIdx + 25) % 26);
+  $("letter-next").onclick = () => openLetter((state.letterIdx + 1) % 26);
 }
 
 function show(screenId) {
-  for (const id of ["picker", "reader", "done"]) $(id).hidden = id !== screenId;
+  for (const id of ["picker", "reader", "done", "abc", "letter"]) {
+    $(id).hidden = id !== screenId;
+  }
+}
+
+// ---------- alphabet flow ----------
+
+function showAbcGrid() {
+  stopListening();
+  speechSynthesis.cancel();
+  const grid = $("abc-grid");
+  grid.innerHTML = "";
+  ALPHABET.forEach((entry, i) => {
+    const tile = document.createElement("button");
+    tile.className = "abc-tile" + (state.lettersSeen.has(entry.letter) ? " done" : "");
+    tile.innerHTML = `${entry.letter} ${entry.letter.toLowerCase()}<span class="tile-emoji">${entry.emoji}</span>`;
+    tile.onclick = () => openLetter(i);
+    grid.appendChild(tile);
+  });
+  $("abc-progress").textContent =
+    state.lettersSeen.size < 26
+      ? `${state.lettersSeen.size} of 26 letters explored`
+      : "All 26 letters explored! ⭐";
+  show("abc");
+}
+
+function openLetter(i) {
+  state.letterIdx = i;
+  const { letter, word, emoji } = ALPHABET[i];
+  $("letter-big").textContent = `${letter} ${letter.toLowerCase()}`;
+  $("letter-emoji").textContent = emoji;
+  $("letter-word").textContent = `${letter} for ${word}`;
+  show("letter");
+  sayLetter(i);
+
+  if (!state.lettersSeen.has(letter)) {
+    state.lettersSeen.add(letter);
+    localStorage.setItem("primer_abc", JSON.stringify([...state.lettersSeen]));
+    if (state.lettersSeen.size === 26) {
+      state.stars += 3;
+      localStorage.setItem("primer_stars", state.stars);
+      $("star-count").textContent = state.stars;
+      throwConfetti();
+      setTimeout(() => speak("Wow! You know all your letters, A to Z! Three stars for you!"), 1200);
+    }
+  }
+}
+
+function sayLetter(i) {
+  const { letter, word } = ALPHABET[i];
+  speak(`${letter}! ${letter} for ${word}. ${word}!`, { rate: 0.75 });
 }
 
 function showPicker() {

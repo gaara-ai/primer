@@ -30,11 +30,37 @@
         <div class="picker-face">🐘</div>
         <div class="picker-bubble">Hi! I'm Gaara! Pick a story and read with me!</div>
       </div>
+      <button id="abc-btn">🔤 ABC Letters <span class="level">Start here — A to Z with pictures!</span></button>
       <h2>Pick a story!</h2>
       <div id="story-list"></div>
       <p class="hint" id="support-warning" hidden>
         ⚠️ Speech recognition needs Chrome or Edge.
       </p>
+    </section>
+
+    <!-- Alphabet grid -->
+    <section id="abc" class="screen" hidden>
+      <h2>🔤 Letter Land</h2>
+      <p class="hint" id="abc-progress"></p>
+      <div id="abc-grid"></div>
+      <button id="abc-back" class="secondary">⬅ Back</button>
+    </section>
+
+    <!-- Single letter card -->
+    <section id="letter" class="screen" hidden>
+      <div id="letter-card">
+        <div id="letter-big"></div>
+        <div id="letter-emoji"></div>
+        <div id="letter-word"></div>
+      </div>
+      <div class="row">
+        <button id="letter-prev" class="secondary">⬅ Back</button>
+        <button id="letter-hear" class="secondary">🔊 Hear it</button>
+        <button id="letter-next" class="secondary">Next ➜</button>
+      </div>
+      <div class="row">
+        <button id="letter-grid-btn" class="secondary">All letters</button>
+      </div>
     </section>
 
     <!-- Reading screen -->
