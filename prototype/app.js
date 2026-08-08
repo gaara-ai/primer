@@ -1,4 +1,4 @@
-// Primer v0 — browser reading loop with Appu the talking buddy.
+// Primer v0 — browser reading loop with Gaara the talking buddy.
 // Uses the Web Speech API (Chrome/Edge). Adult-trained ASR, so scoring is
 // lenient: we're testing engagement and the loop, not accuracy (Phase 2).
 
@@ -16,11 +16,11 @@ const state = {
   recognition: null,
 };
 
-// ---------- Appu's voice lines ----------
+// ---------- Gaara's voice lines ----------
 
 const LINES = {
   greet: [
-    "Hi! I'm Appu! Let's read {title} together!",
+    "Hi! I'm Gaara! Let's read {title} together!",
     "Yay, you picked {title}! I love this one!",
     "Hello my friend! Ready for {title}?",
   ],
@@ -336,9 +336,9 @@ function scoreSentence(heardWords) {
     state.tries++;
     $("next").disabled = false; // never trap a child — allow moving on
     if (state.tries >= 2) {
-      // after two misses, Appu reads the sentence with the child
+      // after two misses, Gaara reads the sentence with the child
       stopListening();
-      $("status").textContent = "Listen to Appu, then try again! 💪";
+      $("status").textContent = "Listen to Gaara, then try again! 💪";
       readTogether();
     } else {
       $("status").textContent = "Good try! Read it once more. 💪";
