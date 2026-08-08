@@ -1,0 +1,14 @@
+{
+  "id": "the_duck_in_the_mud",
+  "title": "The Duck in the Mud",
+  "target_skill": "s4_ckeur",
+  "proper_nouns": [],
+  "sentences": [
+    "The duck is in the mud.",
+    "He can run and dip.",
+    "The sun is up.",
+    "The duck can sit in the sun.",
+    "A rat ran to the duck.",
+    "The duck and the rat nap in the sun."
+  ]
+}
