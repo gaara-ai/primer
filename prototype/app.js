@@ -246,7 +246,7 @@ function openLetter(i) {
 
 function sayLetter(i) {
   const { letter, word } = ALPHABET[i];
-  speak(`${letter}! ${letter} for ${word}. ${word}!`, { rate: 0.75 });
+  speak(`${letter}! ${letter} for ${word}!`, { rate: 0.75 });
 }
 
 function showPicker() {
