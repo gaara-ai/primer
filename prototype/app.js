@@ -124,13 +124,13 @@ function init() {
   $("star-count").textContent = state.stars;
 
   const list = $("story-list");
-  for (const story of STORIES) {
+  STORIES.forEach((story, i) => {
     const btn = document.createElement("button");
-    btn.className = "story-btn";
+    btn.className = `story-btn c${i % 4}`;
     btn.innerHTML = `${story.title}<span class="level">${story.level}</span>`;
     btn.onclick = () => startStory(story);
     list.appendChild(btn);
-  }
+  });
 
   if (!SpeechRecognition) {
     $("support-warning").hidden = false;
@@ -224,6 +224,23 @@ function finishStory() {
     `You read "${state.story.title}" and earned ${"⭐".repeat(earned)}!`;
   show("done");
   buddySay("done");
+  throwConfetti();
+}
+
+function throwConfetti() {
+  const box = $("confetti");
+  const emojis = ["⭐", "🎉", "✨", "🎈", "🌟", "💛"];
+  for (let i = 0; i < 36; i++) {
+    const piece = document.createElement("span");
+    piece.className = "confetto";
+    piece.textContent = emojis[i % emojis.length];
+    piece.style.left = Math.random() * 100 + "vw";
+    piece.style.animationDuration = 2.2 + Math.random() * 2.2 + "s";
+    piece.style.animationDelay = Math.random() * 0.8 + "s";
+    piece.style.fontSize = 1.2 + Math.random() * 1.4 + "rem";
+    box.appendChild(piece);
+    setTimeout(() => piece.remove(), 5500);
+  }
 }
 
 // ---------- word-level help ----------

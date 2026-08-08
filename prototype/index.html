@@ -4,9 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Primer — Reading Buddy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div id="sky">
+    <span class="float sun">☀️</span>
+    <span class="float c1">☁️</span>
+    <span class="float c2">☁️</span>
+    <span class="float c3">🎈</span>
+    <span class="float c4">🦋</span>
+  </div>
+  <div id="confetti"></div>
   <div id="app">
     <header>
       <h1>📚 Reading Buddy</h1>
@@ -15,6 +26,10 @@
 
     <!-- Story picker -->
     <section id="picker" class="screen">
+      <div id="picker-buddy">
+        <div class="picker-face">🐘</div>
+        <div class="picker-bubble">Hi! I'm Gaara! Pick a story and read with me!</div>
+      </div>
       <h2>Pick a story!</h2>
       <div id="story-list"></div>
       <p class="hint" id="support-warning" hidden>
