@@ -193,6 +193,8 @@ function init() {
   $("letter-hear").onclick = () => sayLetter(state.letterIdx);
   $("letter-prev").onclick = () => openLetter((state.letterIdx + 25) % 26);
   $("letter-next").onclick = () => openLetter((state.letterIdx + 1) % 26);
+  $("letter-mic").onclick = letterListen;
+  if (!SpeechRecognition) $("letter-mic").disabled = true;
 }
 
 function show(screenId) {
@@ -205,6 +207,7 @@ function show(screenId) {
 
 function showAbcGrid() {
   stopListening();
+  stopLetterListening();
   speechSynthesis.cancel();
   const grid = $("abc-grid");
   grid.innerHTML = "";
@@ -223,6 +226,8 @@ function showAbcGrid() {
 }
 
 function openLetter(i) {
+  stopLetterListening();
+  $("letter-status").textContent = "";
   state.letterIdx = i;
   const { letter, word, emoji } = ALPHABET[i];
   $("letter-big").textContent = `${letter} ${letter.toLowerCase()}`;
@@ -247,6 +252,75 @@ function openLetter(i) {
 function sayLetter(i) {
   const { letter, word } = ALPHABET[i];
   speak(`${letter}! ${letter} for ${word}!`, { rate: 0.75 });
+}
+
+// ---------- letter "say it" listening ----------
+
+let letterRec = null;
+
+function stopLetterListening() {
+  if (letterRec) {
+    letterRec.onend = null;
+    letterRec.stop();
+    letterRec = null;
+  }
+  $("letter-mic").classList.remove("listening");
+  $("letter-mic").textContent = "🎤 Your turn — say it!";
+}
+
+function letterListen() {
+  if (letterRec) { stopLetterListening(); return; }
+  speechSynthesis.cancel();
+
+  const { letter, word } = ALPHABET[state.letterIdx];
+  // accept the letter name or (any part of) the word
+  const accepted = new Set([
+    letter.toLowerCase(),
+    ...word.toLowerCase().split(/[\s-]+/),
+    word.toLowerCase().replace(/[\s-]+/g, ""),
+  ]);
+
+  const rec = new SpeechRecognition();
+  rec.lang = "en-IN";
+  rec.continuous = false;
+  rec.interimResults = true;
+  rec.maxAlternatives = 5;
+
+  let matched = false;
+
+  rec.onresult = (event) => {
+    for (const result of event.results) {
+      for (const alt of result) {
+        for (const heard of tokenize(alt.transcript)) {
+          if (accepted.has(heard)) matched = true;
+        }
+      }
+    }
+    if (matched) {
+      stopLetterListening();
+      buddyHappy();
+      $("letter-status").textContent = "🌟 Yes! Wonderful!";
+      speak(`Yes! ${word}! Great job!`, { rate: 0.85 });
+    }
+  };
+  rec.onend = () => {
+    letterRec = null;
+    $("letter-mic").classList.remove("listening");
+    $("letter-mic").textContent = "🎤 Your turn — say it!";
+    if (!matched) {
+      $("letter-status").textContent = `Good try! Say "${word}"!`;
+      speak(`Good try! Say, ${word}!`, { rate: 0.8 });
+    }
+  };
+  rec.onerror = () => {
+    $("letter-status").textContent = "I couldn't hear you — try again!";
+  };
+
+  rec.start();
+  letterRec = rec;
+  $("letter-mic").classList.add("listening");
+  $("letter-mic").textContent = "👂 I'm listening…";
+  $("letter-status").textContent = `Say "${word}" or "${letter}"!`;
 }
 
 function showPicker() {
