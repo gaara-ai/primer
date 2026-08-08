@@ -1,4 +1,4 @@
-// Primer v0 — browser reading loop.
+// Primer v0 — browser reading loop with Appu the talking buddy.
 // Uses the Web Speech API (Chrome/Edge). Adult-trained ASR, so scoring is
 // lenient: we're testing engagement and the loop, not accuracy (Phase 2).
 
@@ -10,10 +10,113 @@ const state = {
   story: null,
   sentenceIdx: 0,
   stars: Number(localStorage.getItem("primer_stars") || 0),
-  results: [], // per-sentence: fraction of words matched
+  results: [],        // per-sentence: fraction of words matched
+  tries: 0,           // attempts on the current sentence
   listening: false,
   recognition: null,
 };
+
+// ---------- Appu's voice lines ----------
+
+const LINES = {
+  greet: [
+    "Hi! I'm Appu! Let's read {title} together!",
+    "Yay, you picked {title}! I love this one!",
+    "Hello my friend! Ready for {title}?",
+  ],
+  listen: [
+    "Your turn! Read it nice and loud!",
+    "Go on, you can do it!",
+    "I'm listening with my big ears!",
+  ],
+  perfect: [
+    "Wow! Perfect reading!",
+    "Amazing! Every single word!",
+    "You are a reading star!",
+  ],
+  good: [
+    "Great job! That was lovely!",
+    "Super reading! Keep going!",
+    "You're getting so good at this!",
+  ],
+  tryAgain: [
+    "Good try! Let's read it one more time!",
+    "Almost! Try once more, nice and slow.",
+    "So close! Have another go!",
+  ],
+  together: [
+    "Let's read it together! Listen first, then you try.",
+    "I'll help you! Listen to me, then it's your turn.",
+  ],
+  wordHelp: [
+    "This word is {word}. {word}!",
+  ],
+  done: [
+    "Hooray! You finished the whole story!",
+    "You did it! I'm so proud of you!",
+    "What a super reader you are!",
+  ],
+};
+
+function pick(lines) {
+  return lines[Math.floor(Math.random() * lines.length)];
+}
+
+// ---------- speech synthesis ----------
+
+let voicesReady = [];
+function loadVoices() {
+  voicesReady = speechSynthesis.getVoices();
+}
+loadVoices();
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = loadVoices;
+}
+
+function bestVoice() {
+  return (
+    voicesReady.find((v) => v.lang === "en-IN") ||
+    voicesReady.find((v) => v.lang.startsWith("en-GB")) ||
+    voicesReady.find((v) => v.lang.startsWith("en")) ||
+    null
+  );
+}
+
+function speak(text, { rate = 0.85, pitch = 1.25, onend = null } = {}) {
+  speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate = rate;
+  utter.pitch = pitch;
+  const voice = bestVoice();
+  if (voice) utter.voice = voice;
+
+  const face = $("buddy-face");
+  face.classList.add("talking");
+  utter.onend = () => {
+    face.classList.remove("talking");
+    if (onend) onend();
+  };
+  speechSynthesis.speak(utter);
+}
+
+function buddySay(kind, vars = {}, opts = {}) {
+  let text = pick(LINES[kind]);
+  for (const [key, val] of Object.entries(vars)) {
+    text = text.replaceAll(`{${key}}`, val);
+  }
+  const bubble = $("buddy-bubble");
+  bubble.textContent = text;
+  bubble.hidden = false;
+  speak(text, opts);
+  return text;
+}
+
+function buddyHappy() {
+  const face = $("buddy-face");
+  face.classList.remove("happy");
+  void face.offsetWidth; // restart animation
+  face.classList.add("happy");
+}
 
 // ---------- setup ----------
 
@@ -35,7 +138,7 @@ function init() {
   }
 
   $("mic").onclick = toggleListening;
-  $("hear").onclick = speakSentence;
+  $("hear").onclick = readTogether;
   $("next").onclick = nextSentence;
   $("quit").onclick = showPicker;
   $("again").onclick = showPicker;
@@ -47,6 +150,7 @@ function show(screenId) {
 
 function showPicker() {
   stopListening();
+  speechSynthesis.cancel();
   show("picker");
 }
 
@@ -58,6 +162,7 @@ function startStory(story) {
   state.results = [];
   show("reader");
   renderSentence();
+  buddySay("greet", { title: story.title.replace(/[^\w\s',!.-]/g, "").trim() });
 }
 
 function tokenize(sentence) {
@@ -67,6 +172,7 @@ function tokenize(sentence) {
 function renderSentence() {
   const { story, sentenceIdx } = state;
   const sentence = story.sentences[sentenceIdx];
+  state.tries = 0;
 
   $("progress-dots").textContent = story.sentences
     .map((_, i) => (i < sentenceIdx ? "🟢" : i === sentenceIdx ? "🔵" : "⚪"))
@@ -74,11 +180,11 @@ function renderSentence() {
 
   const box = $("sentence");
   box.innerHTML = "";
-  // Render word-by-word so we can color each one after scoring.
   for (const part of sentence.split(/\s+/)) {
     const span = document.createElement("span");
     span.className = "word";
     span.textContent = part;
+    span.onclick = () => helpWithWord(span);
     box.appendChild(span);
   }
 
@@ -105,7 +211,6 @@ function finishStory() {
   localStorage.setItem("primer_stars", state.stars);
   $("star-count").textContent = state.stars;
 
-  // Log attempt for later analysis (per-story history in localStorage).
   const log = JSON.parse(localStorage.getItem("primer_log") || "[]");
   log.push({
     story: state.story.id,
@@ -118,15 +223,38 @@ function finishStory() {
   $("done-summary").textContent =
     `You read "${state.story.title}" and earned ${"⭐".repeat(earned)}!`;
   show("done");
+  buddySay("done");
 }
 
-// ---------- speech ----------
+// ---------- word-level help ----------
+
+function helpWithWord(span) {
+  const word = tokenize(span.textContent)[0];
+  if (!word) return;
+  span.classList.add("helped");
+  // slow first, then normal speed
+  speak(word, {
+    rate: 0.45,
+    onend: () => speak(word, { rate: 0.85 }),
+  });
+}
+
+function readTogether() {
+  stopListening();
+  const sentence = state.story.sentences[state.sentenceIdx];
+  buddySay("together", {}, {
+    onend: () => speak(sentence, { rate: 0.6, pitch: 1.1 }),
+  });
+}
+
+// ---------- speech recognition ----------
 
 function toggleListening() {
   state.listening ? stopListening() : startListening();
 }
 
 function startListening() {
+  speechSynthesis.cancel(); // buddy stops talking when child starts
   const rec = new SpeechRecognition();
   rec.lang = "en-IN";
   rec.continuous = true;
@@ -160,6 +288,10 @@ function startListening() {
   $("mic").classList.add("listening");
   $("mic").textContent = "👂 Listening… tap when done";
   $("status").textContent = "Read the sentence out loud!";
+  if (state.tries === 0) {
+    $("buddy-bubble").textContent = pick(LINES.listen);
+    $("buddy-bubble").hidden = false;
+  }
 }
 
 function stopListening() {
@@ -182,13 +314,12 @@ function scoreSentence(heardWords) {
   let matched = 0;
   let spanIdx = 0;
   for (const target of targetWords) {
-    // spans include punctuation; align by stripping
     while (spanIdx < spans.length && !tokenize(spans[spanIdx].textContent).length) {
       spanIdx++;
     }
     const span = spans[spanIdx++];
     const ok = heardSet.has(target);
-    if (span) span.className = "word " + (ok ? "good" : "bad");
+    if (span) span.classList.toggle("good", ok), span.classList.toggle("bad", !ok);
     if (ok) matched++;
   }
 
@@ -196,29 +327,24 @@ function scoreSentence(heardWords) {
   state.results[state.sentenceIdx] = score;
 
   if (score >= 0.7) {
+    stopListening();
+    buddyHappy();
+    buddySay(score === 1 ? "perfect" : "good");
     $("status").textContent = score === 1 ? "Perfect! 🌟" : "Great reading! 👏";
     $("next").disabled = false;
-    stopListening();
   } else {
-    $("status").textContent = "Good try! Read it once more. 💪";
+    state.tries++;
     $("next").disabled = false; // never trap a child — allow moving on
+    if (state.tries >= 2) {
+      // after two misses, Appu reads the sentence with the child
+      stopListening();
+      $("status").textContent = "Listen to Appu, then try again! 💪";
+      readTogether();
+    } else {
+      $("status").textContent = "Good try! Read it once more. 💪";
+      buddySay("tryAgain");
+    }
   }
-}
-
-// ---------- text to speech ----------
-
-function speakSentence() {
-  const sentence = state.story.sentences[state.sentenceIdx];
-  const utter = new SpeechSynthesisUtterance(sentence);
-  utter.rate = 0.7;
-  utter.pitch = 1.1;
-  const voices = speechSynthesis.getVoices();
-  const preferred =
-    voices.find((v) => v.lang === "en-IN") ||
-    voices.find((v) => v.lang.startsWith("en-GB")) ||
-    voices.find((v) => v.lang.startsWith("en"));
-  if (preferred) utter.voice = preferred;
-  speechSynthesis.speak(utter);
 }
 
 init();

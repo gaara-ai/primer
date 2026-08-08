@@ -25,7 +25,12 @@
     <!-- Reading screen -->
     <section id="reader" class="screen" hidden>
       <div id="progress-dots"></div>
+      <div id="buddy">
+        <div id="buddy-face">🐘</div>
+        <div id="buddy-bubble" hidden></div>
+      </div>
       <div id="sentence"></div>
+      <p class="hint tap-hint">Tap any word to hear it 🔉</p>
       <button id="mic" type="button">🎤 Tap, then read aloud</button>
       <p class="hint" id="status">Tap the mic and read the sentence.</p>
       <div class="row">
@@ -37,7 +42,8 @@
 
     <!-- Celebration -->
     <section id="done" class="screen" hidden>
-      <h2>🎉 You did it!</h2>
+      <div id="buddy-done">🐘🎉</div>
+      <h2>You did it!</h2>
       <p id="done-summary"></p>
       <button id="again" type="button">More stories</button>
     </section>

@@ -48,6 +48,53 @@ h1 { font-size: 1.6rem; color: #00695c; }
 
 #progress-dots { margin-bottom: 18px; font-size: 1.1rem; letter-spacing: 6px; }
 
+#buddy {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+  min-height: 78px;
+}
+
+#buddy-face {
+  font-size: 3.2rem;
+  line-height: 1;
+  transition: transform 0.2s;
+}
+#buddy-face.talking { animation: wiggle 0.5s ease-in-out infinite; }
+#buddy-face.happy { animation: bounce 0.5s ease-in-out 2; }
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-4deg); }
+  50% { transform: rotate(4deg); }
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+
+#buddy-bubble {
+  background: white;
+  border: 2px solid #26a69a;
+  border-radius: 16px;
+  border-bottom-left-radius: 4px;
+  padding: 10px 16px;
+  font-size: 1.05rem;
+  color: #00695c;
+  max-width: 70%;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.tap-hint { font-size: 0.85rem; margin: -14px 0 14px; }
+
+.word { cursor: pointer; border-radius: 8px; padding: 0 2px; }
+.word:hover { background: #fff3e0; }
+.word.helped { background: #fff8e1; }
+
+#buddy-done { font-size: 4rem; margin-bottom: 10px; }
+
 #sentence {
   font-size: 2.4rem;
   line-height: 1.6;
