@@ -74,12 +74,23 @@ if (speechSynthesis.onvoiceschanged !== undefined) {
 }
 
 function bestVoice() {
-  return (
-    voicesReady.find((v) => v.lang === "en-IN") ||
-    voicesReady.find((v) => v.lang.startsWith("en-GB")) ||
-    voicesReady.find((v) => v.lang.startsWith("en")) ||
-    null
-  );
+  // Rank by quality, not just language: Edge's neural "Natural" voices are
+  // near-human, Chrome's "Google" voices are decent, Windows legacy voices
+  // (Heera/Ravi/David/Zira) are robotic and come last.
+  const score = (v) => {
+    if (!v.lang.startsWith("en")) return -1;
+    let s = 0;
+    if (/natural|neural/i.test(v.name)) s += 100;
+    if (/google/i.test(v.name)) s += 50;
+    if (/aria|sonia|libby|jenny|swara|neerja|female/i.test(v.name)) s += 10;
+    if (v.lang === "en-IN") s += 5;
+    else if (v.lang === "en-GB") s += 3;
+    return s;
+  };
+  const ranked = voicesReady
+    .filter((v) => score(v) >= 0)
+    .sort((a, b) => score(b) - score(a));
+  return ranked[0] || null;
 }
 
 function speak(text, { rate = 0.85, pitch = 1.25, onend = null } = {}) {
