@@ -1,0 +1,12 @@
+{
+  "comment": "High-frequency words taught as whole words ('tricky words'). Grouped by the skill stage at which they are introduced; a story may use sight words introduced at or before its target skill.",
+  "groups": [
+    { "introduced_at": "s1_satp", "words": ["the", "I"] },
+    { "introduced_at": "s2_inmd", "words": ["to", "no", "go"] },
+    { "introduced_at": "s4_ckeur", "words": ["he", "she", "we", "me", "be"] },
+    { "introduced_at": "s6_jvwx", "words": ["was", "my", "you"] },
+    { "introduced_at": "s8_sh", "words": ["they", "her", "all", "are"] },
+    { "introduced_at": "s10_th", "words": ["said", "so", "have", "like"] },
+    { "introduced_at": "s12_ai_ee", "words": ["some", "come", "were", "there", "little", "one", "do", "when", "out", "what"] }
+  ]
+}

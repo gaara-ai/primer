@@ -1,0 +1,15 @@
+{
+  "id": "rain_in_the_week",
+  "title": "Rain in the Week",
+  "target_skill": "s12_ai_ee",
+  "proper_nouns": ["Meena"],
+  "sentences": [
+    "It is a wet week.",
+    "The rain hit the shed.",
+    "We sit in the shed.",
+    "When will the sun come out? said Meena.",
+    "Then no rain! The sun is up.",
+    "We see a green tree and a bee.",
+    "We run and sing in the sun."
+  ]
+}

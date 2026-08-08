@@ -1,0 +1,125 @@
+{
+  "comment": "First 15 skills of a structured-phonics scope & sequence (Letters-and-Sounds-style ordering: s a t p i n first). Each skill's word_bank contains fully decodable words unlocked AT that skill. A story targeting skill K may use the union of word_banks for all skills up to K (topological order) plus sight_words.json.",
+  "skills": [
+    {
+      "id": "s1_satp",
+      "name": "Letters s, a, t, p",
+      "type": "grapheme_phoneme",
+      "graphemes": ["s", "a", "t", "p"],
+      "prerequisites": [],
+      "word_bank": ["at", "sat", "pat", "tap", "sap", "as", "a"]
+    },
+    {
+      "id": "s2_inmd",
+      "name": "Letters i, n, m, d",
+      "type": "grapheme_phoneme",
+      "graphemes": ["i", "n", "m", "d"],
+      "prerequisites": ["s1_satp"],
+      "word_bank": ["in", "it", "is", "sit", "pin", "tin", "nap", "man", "mat", "map", "dad", "sad", "dip", "did", "pad", "and"]
+    },
+    {
+      "id": "s3_gock",
+      "name": "Letters g, o, c, k",
+      "type": "grapheme_phoneme",
+      "graphemes": ["g", "o", "c", "k"],
+      "prerequisites": ["s2_inmd"],
+      "word_bank": ["got", "dog", "dig", "gap", "on", "not", "pot", "top", "can", "cat", "cap", "cot", "kid", "kit", "sock", "sack", "pick", "pack"]
+    },
+    {
+      "id": "s4_ckeur",
+      "name": "Letters e, u, r",
+      "type": "grapheme_phoneme",
+      "graphemes": ["e", "u", "r"],
+      "prerequisites": ["s3_gock"],
+      "word_bank": ["get", "pet", "ten", "net", "pen", "red", "men", "up", "us", "sun", "run", "mud", "cup", "rat", "rag", "rip", "ran", "rock", "duck"]
+    },
+    {
+      "id": "s5_hbfl",
+      "name": "Letters h, b, f, l",
+      "type": "grapheme_phoneme",
+      "graphemes": ["h", "b", "f", "l", "ff", "ll", "ss"],
+      "prerequisites": ["s4_ckeur"],
+      "word_bank": ["hat", "hen", "hit", "hot", "hut", "hug", "has", "his", "him", "hop", "bag", "bed", "big", "bug", "bat", "bun", "but", "fan", "fun", "fit", "fed", "leg", "let", "lot", "lip", "log", "lap", "off", "huff", "puff", "hill", "bell", "doll", "fell", "tell", "will", "miss", "hiss", "less", "fuss"]
+    },
+    {
+      "id": "s6_jvwx",
+      "name": "Letters j, v, w, x",
+      "type": "grapheme_phoneme",
+      "graphemes": ["j", "v", "w", "x"],
+      "prerequisites": ["s5_hbfl"],
+      "word_bank": ["jam", "jet", "jog", "jug", "van", "vet", "wet", "win", "wag", "web", "wig", "box", "fox", "six", "fix", "mix"]
+    },
+    {
+      "id": "s7_yzqu",
+      "name": "Letters y, z, qu",
+      "type": "grapheme_phoneme",
+      "graphemes": ["y", "z", "zz", "qu"],
+      "prerequisites": ["s6_jvwx"],
+      "word_bank": ["yes", "yet", "yum", "yap", "zip", "zag", "buzz", "quit", "quiz"]
+    },
+    {
+      "id": "s8_sh",
+      "name": "Digraph sh",
+      "type": "digraph",
+      "graphemes": ["sh"],
+      "prerequisites": ["s7_yzqu"],
+      "word_bank": ["ship", "shop", "shut", "shed", "shell", "fish", "dish", "wish", "rush", "hush", "shock"]
+    },
+    {
+      "id": "s9_ch",
+      "name": "Digraph ch",
+      "type": "digraph",
+      "graphemes": ["ch"],
+      "prerequisites": ["s8_sh"],
+      "word_bank": ["chip", "chat", "chin", "chop", "chick", "check", "such", "much", "rich", "lunch", "munch"]
+    },
+    {
+      "id": "s10_th",
+      "name": "Digraph th",
+      "type": "digraph",
+      "graphemes": ["th"],
+      "prerequisites": ["s9_ch"],
+      "word_bank": ["this", "that", "then", "them", "with", "thin", "thick", "moth", "bath", "path"]
+    },
+    {
+      "id": "s11_ng",
+      "name": "Digraph ng",
+      "type": "digraph",
+      "graphemes": ["ng"],
+      "prerequisites": ["s10_th"],
+      "word_bank": ["ring", "king", "sing", "song", "long", "bang", "hang", "wing", "sting", "strong"]
+    },
+    {
+      "id": "s12_ai_ee",
+      "name": "Vowel digraphs ai, ee",
+      "type": "vowel_digraph",
+      "graphemes": ["ai", "ee"],
+      "prerequisites": ["s11_ng"],
+      "word_bank": ["rain", "tail", "wait", "sail", "main", "paint", "see", "bee", "feet", "tree", "keep", "sleep", "green", "seen", "week", "need"]
+    },
+    {
+      "id": "s13_oa_oo",
+      "name": "Vowel digraphs oa, oo",
+      "type": "vowel_digraph",
+      "graphemes": ["oa", "oo"],
+      "prerequisites": ["s12_ai_ee"],
+      "word_bank": ["boat", "coat", "goat", "road", "soap", "toad", "moon", "soon", "food", "roof", "zoo", "too", "book", "look", "took", "good", "foot", "wood"]
+    },
+    {
+      "id": "s14_ccvc",
+      "name": "Consonant blends (CCVC)",
+      "type": "blend",
+      "graphemes": [],
+      "prerequisites": ["s13_oa_oo"],
+      "word_bank": ["stop", "spot", "step", "spin", "snap", "swim", "flag", "flip", "frog", "from", "grab", "grin", "plan", "plum", "slip", "sled", "trip", "twig", "drum", "drop", "clap", "club", "crab", "cross"]
+    },
+    {
+      "id": "s15_cvcc",
+      "name": "Final blends (CVCC)",
+      "type": "blend",
+      "graphemes": [],
+      "prerequisites": ["s14_ccvc"],
+      "word_bank": ["jump", "bump", "camp", "lamp", "hand", "sand", "land", "pond", "wind", "went", "tent", "sent", "best", "nest", "rest", "fast", "last", "just", "must", "milk", "help", "gift", "soft", "left"]
+    }
+  ]
+}

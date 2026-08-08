@@ -1,0 +1,14 @@
+{
+  "id": "the_sad_cat",
+  "title": "The Sad Cat",
+  "target_skill": "s5_hbfl",
+  "proper_nouns": [],
+  "sentences": [
+    "The cat sat on the mat.",
+    "The cat is sad.",
+    "He did not get up.",
+    "I pat the cat on the leg.",
+    "The cat got a big hug.",
+    "The cat is not sad. He is up!"
+  ]
+}
