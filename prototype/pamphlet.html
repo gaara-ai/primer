@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reading Buddy — Pamphlet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Baloo 2", "Segoe UI", sans-serif;
+      background: #e0f2fe;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* A4 portrait proportions */
+    .page {
+      background: linear-gradient(180deg, #bde9ff 0%, #eafaff 40%, #fffbe8 100%);
+      width: 210mm;
+      min-height: 290mm;
+      border-radius: 8px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      padding: 14mm 14mm 10mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: #0277bd;
+      text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.8);
+      line-height: 1.1;
+    }
+
+    .tagline {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #e65100;
+      margin: 4px 0 12px;
+    }
+
+    .hero {
+      width: 88mm;
+      border-radius: 16px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+      margin-bottom: 12px;
+    }
+
+    .features {
+      display: flex;
+      gap: 10px;
+      margin: 4px 0 14px;
+      width: 100%;
+    }
+
+    .feature {
+      flex: 1;
+      background: white;
+      border-radius: 14px;
+      padding: 12px 10px;
+      box-shadow: 0 3px 0 #cfd8dc;
+    }
+
+    .feature .emoji { font-size: 2rem; display: block; margin-bottom: 4px; }
+    .feature b { color: #01579b; font-size: 1.05rem; display: block; margin-bottom: 2px; }
+    .feature span { font-size: 0.92rem; color: #546e7a; line-height: 1.35; display: block; }
+
+    .how {
+      background: #fff8e1;
+      border: 2px dashed #ffb300;
+      border-radius: 14px;
+      padding: 10px 16px;
+      margin-bottom: 14px;
+      width: 100%;
+    }
+    .how b { color: #e65100; font-size: 1.1rem; }
+    .how ol {
+      text-align: left;
+      margin: 6px 0 0 22px;
+      font-size: 1rem;
+      color: #37474f;
+      line-height: 1.55;
+    }
+
+    .qr-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin-bottom: 12px;
+    }
+
+    .qr-row img {
+      width: 34mm;
+      height: 34mm;
+      border: 5px solid white;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    .qr-text { text-align: left; }
+    .qr-text .scan { font-size: 1.15rem; font-weight: 800; color: #01579b; }
+    .url {
+      display: inline-block;
+      background: white;
+      border-radius: 999px;
+      padding: 8px 20px;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #0277bd;
+      box-shadow: 0 3px 0 #90caf9;
+      margin-top: 6px;
+    }
+
+    .badges { font-size: 1.02rem; font-weight: 700; color: #2e7d32; margin-bottom: 12px; }
+
+    .footer {
+      margin-top: auto;
+      font-size: 0.95rem;
+      color: #546e7a;
+      border-top: 2px solid #b3e5fc;
+      padding-top: 8px;
+      width: 100%;
+    }
+    .footer b { color: #01579b; }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .page { box-shadow: none; width: 100%; min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>📚 Reading Buddy</h1>
+    <div class="tagline">A friendly elephant who teaches your child to read!</div>
+
+    <img class="hero" src="promo.png" alt="Gaara the elephant reading with a child" />
+
+    <div class="features">
+      <div class="feature">
+        <span class="emoji">🔤</span>
+        <b>ABC with pictures</b>
+        <span>A for Apple to Z for Zebra — every letter spoken aloud with a picture.</span>
+      </div>
+      <div class="feature">
+        <span class="emoji">🎤</span>
+        <b>Listens to your child</b>
+        <span>Your child reads stories aloud; Gaara hears them and gently helps with hard words.</span>
+      </div>
+      <div class="feature">
+        <span class="emoji">⭐</span>
+        <b>10 story levels</b>
+        <span>From first letters to full sentences — with stars, cheers and confetti.</span>
+      </div>
+    </div>
+
+    <div class="how">
+      <b>How to start (2 minutes):</b>
+      <ol>
+        <li>Scan the QR code or type the link in the <b>Chrome</b> browser on your phone.</li>
+        <li>Allow the microphone when asked.</li>
+        <li>Hand the phone to your child — Gaara does the rest!</li>
+      </ol>
+    </div>
+
+    <div class="qr-row">
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&margin=8&data=https%3A%2F%2Fgaaraai.vercel.app" alt="QR code to open Reading Buddy" />
+      <div class="qr-text">
+        <div class="scan">📱 Scan to open</div>
+        <div class="url">gaaraai.vercel.app</div>
+      </div>
+    </div>
+
+    <div class="badges">✅ Free forever &nbsp;•&nbsp; ✅ No ads &nbsp;•&nbsp; ✅ No sign-up &nbsp;•&nbsp; ✅ No personal data</div>
+
+    <div class="footer">
+      Built with ❤️ by a <b>CSE student at IIT Madras</b> — being tested with families like yours.<br />
+      Your feedback shapes what gets built next. Thank you for trying it!
+    </div>
+  </div>
+</body>
+</html>
