@@ -132,9 +132,33 @@
     }
     .footer b { color: #01579b; }
 
+    @page { size: A4 portrait; margin: 0; }
+
     @media print {
       body { background: white; padding: 0; }
-      .page { box-shadow: none; width: 100%; min-height: auto; }
+      .page {
+        box-shadow: none;
+        border-radius: 0;
+        width: 100%;
+        min-height: 0;
+        padding: 4mm 8mm;
+      }
+      h1 { font-size: 2.1rem; }
+      .tagline { font-size: 1rem; margin: 0 0 4px; }
+      .hero { width: 46mm; margin-bottom: 4px; }
+      .badges, .footer, .qr-row, .how { page-break-inside: avoid; }
+      .features { margin: 2px 0 8px; }
+      .feature { padding: 7px 8px; }
+      .feature .emoji { font-size: 1.5rem; }
+      .feature b { font-size: 0.95rem; }
+      .feature span { font-size: 0.82rem; }
+      .how { padding: 7px 14px; margin-bottom: 8px; }
+      .how ol { font-size: 0.92rem; }
+      .qr-row { margin-bottom: 6px; gap: 14px; }
+      .qr-row img { width: 27mm; height: 27mm; }
+      .url { font-size: 1.1rem; padding: 6px 16px; }
+      .badges { font-size: 0.92rem; margin-bottom: 6px; }
+      .footer { margin-top: 4px; padding-top: 6px; font-size: 0.85rem; }
     }
   </style>
 </head>
